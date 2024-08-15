@@ -1,7 +1,7 @@
 package com.sparta.schedulemanagement.repository;
 
-import com.sparta.schedulemanagement.dto.InquiryScheduleResDto;
-import com.sparta.schedulemanagement.dto.UpdateScheduleReqDto;
+import com.sparta.schedulemanagement.dto.ScheduleDto.InquiryScheduleResDto;
+import com.sparta.schedulemanagement.dto.ScheduleDto.UpdateScheduleReqDto;
 import com.sparta.schedulemanagement.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

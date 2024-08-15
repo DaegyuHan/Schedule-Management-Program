@@ -1,6 +1,6 @@
 package com.sparta.schedulemanagement.controller;
 
-import com.sparta.schedulemanagement.dto.*;
+import com.sparta.schedulemanagement.dto.ScheduleDto.*;
 import com.sparta.schedulemanagement.service.ScheduleService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedule/{id}")
-    public List<InquiryScheduleResDto> createSchedule(@PathVariable Long id) {
+    public List<InquiryScheduleResDto> inquirySchedule(@PathVariable Long id) {
         return scheduleService.inquirySchedule(id);
     }
 
@@ -37,7 +37,7 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedule")
-    public Long updateSchedule(@RequestParam Long id, @RequestBody UpdateScheduleReqDto updateScheduleReqDto) {
+    public UpdateScheduleReqDto updateSchedule(@RequestParam Long id, @RequestBody UpdateScheduleReqDto updateScheduleReqDto) {
         return scheduleService.updateSchedule(id,updateScheduleReqDto);
     }
 

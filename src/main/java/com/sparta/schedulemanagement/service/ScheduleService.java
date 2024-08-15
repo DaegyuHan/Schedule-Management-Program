@@ -1,6 +1,6 @@
 package com.sparta.schedulemanagement.service;
 
-import com.sparta.schedulemanagement.dto.*;
+import com.sparta.schedulemanagement.dto.ScheduleDto.*;
 import com.sparta.schedulemanagement.entity.Schedule;
 import com.sparta.schedulemanagement.repository.ScheduleRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,14 +38,14 @@ public class ScheduleService {
         return scheduleRepository.findByNameOrDate(name, date);
     }
 
-    public Long updateSchedule(Long id, UpdateScheduleReqDto updateScheduleReqDto) {
+    public UpdateScheduleReqDto updateSchedule(Long id, UpdateScheduleReqDto updateScheduleReqDto) {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         // 해당 스케줄이 DB 에 존재하는지 확인
         Schedule schedule = scheduleRepository.findById(id);
         if(schedule != null) {
             // schedule 수정
             scheduleRepository.update(id,updateScheduleReqDto);
-            return id;
+            return updateScheduleReqDto;
         } else {
             throw new IllegalArgumentException("선택한 일정이 존재하지 않습니다.");
         }
