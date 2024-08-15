@@ -33,9 +33,9 @@ public class ScheduleService {
         return scheduleRepository.findOne(id);
     }
 
-    public List<InquiryScheduleResDto> inquirySchedule(Long id, String date) {
+    public List<InquiryScheduleResDto> inquirySchedule(Long id, String date, int pageNum, int pageSize) {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        return scheduleRepository.findByIdOrDate(id, date);
+        return scheduleRepository.findByIdOrDate(id, date, pageNum, pageSize);
     }
 
     public UpdateScheduleReqDto updateSchedule(Long id, UpdateScheduleReqDto updateScheduleReqDto) {

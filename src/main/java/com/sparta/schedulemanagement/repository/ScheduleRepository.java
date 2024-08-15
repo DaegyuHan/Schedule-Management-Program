@@ -49,7 +49,7 @@ public class ScheduleRepository {
     // Schedule 조회
     public List<InquiryScheduleResDto> findOne(Long id) {
         // DB 조회
-        String sql = "SELECT * FROM schedule WHERE schedule_id = ?";
+        String sql = "SELECT s.schedule_id, u.user_id, u.user_name, s.contents, s.updated_date FROM schedule s JOIN user u ON s.user_id = u.user_id WHERE s.schedule_id = ?";
 
         return jdbcTemplate.query(sql, new Object[]{id}, new RowMapper<InquiryScheduleResDto>() {
             @Override
@@ -57,41 +57,47 @@ public class ScheduleRepository {
                 // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
                 Long scheduleId = rs.getLong("schedule_id");
                 Long userId = rs.getLong("user_id");
+                String userName = rs.getString("user_name");
                 String contents = rs.getString("contents");
                 Timestamp updatedDate = rs.getTimestamp("updated_date");
-                return new InquiryScheduleResDto(scheduleId, userId, contents, updatedDate);
+                return new InquiryScheduleResDto(scheduleId, userId, userName, contents, updatedDate);
             }
         });
     }
 
     // Schedule 목록 조회
-    public List<InquiryScheduleResDto> findByIdOrDate(Long id, String date) {
-        String sql = "SELECT schedule_id, user_id, contents, updated_date FROM schedule WHERE 1=1";
+    public List<InquiryScheduleResDto> findByIdOrDate(Long id, String date, int pageNum, int pageSize) {
+        String sql = "SELECT s.schedule_id, u.user_name, u.user_id, s.contents, s.updated_date FROM schedule s JOIN user u ON s.user_id = u.user_id WHERE 1=1";
 
         List<Object> params = new ArrayList<>();
 
         // name이 있을 경우 쿼리에 추가
         if (id != null) {
-            sql += " AND user_id = ?";
+            sql += " AND s.user_id = ?";
             params.add(id);
         }
 
         // date가 있을 경우 쿼리에 추가
         if (date != null && !date.isEmpty()) {
-            sql += " AND DATE(updated_date) = ?";
+            sql += " AND DATE(s.updated_date) = ?";
             params.add(date);
         }
 
-        sql += " ORDER BY updated_date DESC";
+        int offset = (pageNum - 1) * pageSize;
+        sql += " ORDER BY s.updated_date DESC LIMIT ? OFFSET ?";
+        params.add(pageSize);
+        params.add(offset);
+
 
         return jdbcTemplate.query(sql, params.toArray(), new RowMapper<InquiryScheduleResDto>() {
             @Override
             public InquiryScheduleResDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Long scheduleId = rs.getLong("schedule_id");
                 Long userId = rs.getLong("user_id");
+                String userName = rs.getString("user_name");
                 String contents = rs.getString("contents");
                 Timestamp updatedDate = rs.getTimestamp("updated_date");
-                return new InquiryScheduleResDto(scheduleId, userId, contents, updatedDate);
+                return new InquiryScheduleResDto(scheduleId, userId, userName, contents, updatedDate);
             }
         });
     }
@@ -119,7 +125,7 @@ public class ScheduleRepository {
 
     public Schedule findById(Long id) {
         // DB 조회
-        String sql = "SELECT * FROM schedule WHERE schedule_id = ?";
+        String sql = "SELECT s.* FROM schedule s JOIN user u ON s.user_id = u.userid WHERE s.schedule_id = ?";
 
         return jdbcTemplate.query(sql, resultSet -> {
             if (resultSet.next()) {
@@ -133,7 +139,6 @@ public class ScheduleRepository {
             }
         }, id);
     }
-
 
 
 }
