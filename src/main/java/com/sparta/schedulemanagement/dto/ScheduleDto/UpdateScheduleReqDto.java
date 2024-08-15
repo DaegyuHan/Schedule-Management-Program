@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 @Getter
 public class UpdateScheduleReqDto {
-    private String userName;
+    private Long userId;
     private String contents;
     private String password;
     private Timestamp updatedDate;

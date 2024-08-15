@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class RegisterScheduleReqDto {
-    private String userName;
+    private Long userId;
     private String contents;
     private String password;
 }

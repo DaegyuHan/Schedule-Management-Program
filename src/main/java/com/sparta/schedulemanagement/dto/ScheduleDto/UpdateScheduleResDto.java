@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 @Getter
 public class UpdateScheduleResDto {
     private Long scheduleId;
-    private String userName;
+    private Long userId;
     private String contents;
     private Timestamp updatedDate;
 }

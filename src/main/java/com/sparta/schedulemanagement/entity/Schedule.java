@@ -12,14 +12,14 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class Schedule {
     private Long scheduleId;
-    private String userName;
+    private Long userId;
     private String contents;
     private Timestamp createdDate;
     private Timestamp updatedDate;
     private String password;
 
     public Schedule(RegisterScheduleReqDto requestDto) {
-        this.userName = requestDto.getUserName();
+        this.userId = requestDto.getUserId();
         this.contents = requestDto.getContents();
         this.password = requestDto.getPassword();
         this.createdDate = new Timestamp(System.currentTimeMillis());

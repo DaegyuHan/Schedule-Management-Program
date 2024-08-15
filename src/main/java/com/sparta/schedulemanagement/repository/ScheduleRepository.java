@@ -25,12 +25,12 @@ public class ScheduleRepository {
         // DB 저장
         KeyHolder keyHolder = new GeneratedKeyHolder(); // 기본 키를 반환받기 위한 객체
 
-        String sql = "INSERT INTO schedule (user_name, contents, password, created_date, updated_date) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO schedule (user_id, contents, password, created_date, updated_date) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(con -> {
                     PreparedStatement preparedStatement = con.prepareStatement(sql,
                             Statement.RETURN_GENERATED_KEYS);
 
-                    preparedStatement.setString(1, schedule.getUserName());
+                    preparedStatement.setLong(1, schedule.getUserId());
                     preparedStatement.setString(2, schedule.getContents());
                     preparedStatement.setString(3, schedule.getPassword());
                     preparedStatement.setTimestamp(4, schedule.getCreatedDate());
@@ -56,24 +56,24 @@ public class ScheduleRepository {
             public InquiryScheduleResDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
                 Long scheduleId = rs.getLong("schedule_id");
-                String username = rs.getString("user_name");
+                Long userId = rs.getLong("user_id");
                 String contents = rs.getString("contents");
                 Timestamp updatedDate = rs.getTimestamp("updated_date");
-                return new InquiryScheduleResDto(scheduleId, username, contents, updatedDate);
+                return new InquiryScheduleResDto(scheduleId, userId, contents, updatedDate);
             }
         });
     }
 
     // Schedule 목록 조회
-    public List<InquiryScheduleResDto> findByNameOrDate(String name, String date) {
-        String sql = "SELECT schedule_id, user_name, contents, updated_date FROM schedule WHERE 1=1";
+    public List<InquiryScheduleResDto> findByIdOrDate(Long id, String date) {
+        String sql = "SELECT schedule_id, user_id, contents, updated_date FROM schedule WHERE 1=1";
 
         List<Object> params = new ArrayList<>();
 
         // name이 있을 경우 쿼리에 추가
-        if (name != null && !name.isEmpty()) {
-            sql += " AND user_name = ?";
-            params.add(name);
+        if (id != null) {
+            sql += " AND user_id = ?";
+            params.add(id);
         }
 
         // date가 있을 경우 쿼리에 추가
@@ -88,19 +88,19 @@ public class ScheduleRepository {
             @Override
             public InquiryScheduleResDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Long scheduleId = rs.getLong("schedule_id");
-                String userName = rs.getString("user_name");
+                Long userId = rs.getLong("user_id");
                 String contents = rs.getString("contents");
                 Timestamp updatedDate = rs.getTimestamp("updated_date");
-                return new InquiryScheduleResDto(scheduleId, userName, contents, updatedDate);
+                return new InquiryScheduleResDto(scheduleId, userId, contents, updatedDate);
             }
         });
     }
 
     // Schedule 수정
     public void update(Long id, UpdateScheduleReqDto updateScheduleReqDto) {
-        String sql = "UPDATE schedule SET user_name = ?, contents = ?, updated_date = ? WHERE schedule_id = ? AND password = ?";
+        String sql = "UPDATE schedule SET user_id = ?, contents = ?, updated_date = ? WHERE schedule_id = ? AND password = ?";
         int updating = jdbcTemplate.update(sql,
-                updateScheduleReqDto.getUserName(),
+                updateScheduleReqDto.getUserId(),
                 updateScheduleReqDto.getContents(),
                 updateScheduleReqDto.getUpdatedDate(),
                 id,
@@ -124,7 +124,7 @@ public class ScheduleRepository {
         return jdbcTemplate.query(sql, resultSet -> {
             if (resultSet.next()) {
                 Schedule schedule = new Schedule();
-                schedule.setUserName(resultSet.getString("user_name"));
+                schedule.setUserId(resultSet.getLong("user_id"));
                 schedule.setContents(resultSet.getString("contents"));
                 schedule.setPassword(resultSet.getString("password"));
                 return schedule;
@@ -133,6 +133,7 @@ public class ScheduleRepository {
             }
         }, id);
     }
+
 
 
 }

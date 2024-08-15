@@ -31,9 +31,9 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedule")
-    public List<InquiryScheduleResDto> getSchedule(@RequestParam(required = false) String name,
+    public List<InquiryScheduleResDto> getSchedule(@RequestParam(required = false) Long id,
                                                    @RequestParam(required = false) String date) {
-        return scheduleService.inquirySchedule(name, date);
+        return scheduleService.inquirySchedule(id, date);
     }
 
     @PutMapping("/schedule")
