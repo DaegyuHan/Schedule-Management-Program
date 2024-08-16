@@ -1,7 +1,8 @@
 # Schedule-Management-Program
 -API 명세서
 
-![image](https://github.com/user-attachments/assets/ede5b1b0-979d-46f0-8f8b-5231ef84394e)
+![image](https://github.com/user-attachments/assets/0ec2d080-c185-41f6-8a79-5cf3eaeac57d)
+
 
 -ERD
 
