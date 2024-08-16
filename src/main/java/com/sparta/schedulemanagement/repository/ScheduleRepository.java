@@ -83,6 +83,7 @@ public class ScheduleRepository {
             params.add(date);
         }
 
+        // 페이지네이션 구현
         int offset = (pageNum - 1) * pageSize;
         sql += " ORDER BY s.updated_date DESC LIMIT ? OFFSET ?";
         params.add(pageSize);

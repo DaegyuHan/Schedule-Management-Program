@@ -45,6 +45,7 @@ public class UserRepository {
         return user;
     }
 
+    // user 조회
     public List<InquiryUserResDto> findOne(Long id) {
         // DB 조회
         String sql = "SELECT * FROM user WHERE user_id = ?";
@@ -62,6 +63,7 @@ public class UserRepository {
         });
     }
 
+    // user 수정
     public void update(Long id, UpdateUserReqDto updateUserReqDto) {
         String sql = "UPDATE user SET user_name = ?, email = ?, updated_date = ? WHERE user_id = ?";
         jdbcTemplate.update(sql,
@@ -72,6 +74,13 @@ public class UserRepository {
                 );
     }
 
+    // user 삭제
+    public void delete(Long id) {
+        String sql = "DELETE FROM user WHERE user_id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    // id 값으로 해당 user 접근
     public User findById(Long id) {
         // DB 조회
         String sql = "SELECT * FROM user WHERE user_id = ?";
@@ -87,8 +96,4 @@ public class UserRepository {
             }
         }, id);    }
 
-    public void delete(Long id) {
-        String sql = "DELETE FROM user WHERE user_id = ?";
-        jdbcTemplate.update(sql, id);
-    }
 }
